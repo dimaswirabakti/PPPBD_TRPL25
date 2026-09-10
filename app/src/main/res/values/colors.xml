@@ -2,4 +2,20 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="yellow">#FFF043</color>
+
+    <!-- IG.LOCAL gradient palette -->
+    <color name="ig_gradient_purple">#405DE6</color>
+    <color name="ig_gradient_magenta">#C13584</color>
+    <color name="ig_gradient_orange">#F77737</color>
+
+    <!-- Neutrals -->
+    <color name="text_primary">#1A1A1A</color>
+    <color name="text_secondary">#6E6E6E</color>
+    <color name="divider_gray">#E0E0E0</color>
+
+    <!-- Alternating photo grid tints -->
+    <color name="surface_light_purple">#F1EEFB</color>
+    <color name="surface_light_pink">#FDF0F6</color>
+    <color name="surface_light_orange">#FFF3E9</color>
 </resources>
