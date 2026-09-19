@@ -33,6 +33,13 @@
     <string name="toast_profile_updated">Bio berhasil diperbarui</string>
     <string name="toast_new_follower">+1 follower baru!</string>
     <string name="toast_menu_soon">Menu belum tersedia</string>
-    <string name="toast_photo_clicked">Foto ke-%1$d diklik</string>
+<!--    <string name="toast_photo_clicked">Foto ke-%1$d diklik</string>-->
     <string name="share_profile_text">Kunjungi profil %1$s (%2$s) di IG.LOCAL!</string>
+
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="label_nama">Nama</string>
+    <string name="hint_nama">Masukkan nama</string>
+    <string name="label_bio">Bio</string>
+    <string name="hint_bio">Masukkan bio</string>
+    <string name="photo_detail_label">Foto ke-%1$d</string>
 </resources>
