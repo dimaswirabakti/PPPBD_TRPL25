@@ -4,6 +4,15 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
-
-    <style name="Theme.PPPBD_TRPL25" parent="Base.Theme.PPPBD_TRPL25" />
+    <!-- Base application theme with ActionBar. -->
+    <style name="Base.Theme.PPPBD_TRPL25.WithActionBar"
+        parent="Theme.Material3.DayNight">
+        <!-- Customize your light theme here, similar to the theme without
+        ActionBar. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+    <!-- Themes that can be applied to the application or specific activities. -->
+    <style name="Base.Theme.PPPBD_TRPL25." parent="Base.Theme.PPPBD_TRPL25" />
+    <style name="Theme.PPPBD_TRPL25.WithActionBar"
+        parent="Base.Theme.PPPBD_TRPL25.WithActionBar" />
 </resources>

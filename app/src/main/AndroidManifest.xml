@@ -10,7 +10,7 @@
         android:label="PPPBD_TRPL25"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PPPBD_TRPL25">
+        android:theme="@style/Theme.PPPBD_TRPL25.WithActionBar">
         <activity
             android:name=".MainActivity"
             android:exported="true">

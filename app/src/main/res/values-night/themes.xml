@@ -4,4 +4,11 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
+    <!-- Base application theme with ActionBar. -->
+    <style name="Base.Theme.PPPBD_TRPL25.WithActionBar"
+        parent="Theme.Material3.DayNight">
+        <!-- Customize your dark theme here, similar to the theme without ActionBar.
+        -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    </style>
 </resources>
