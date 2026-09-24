@@ -4,4 +4,8 @@
     <string name="tab_text_1">Home</string>
     <string name="tab_text_2">Materi</string>
     <string name="tab_text_3">Quiz</string>
+    <string name="class_name">Praktikum Pemrograman Perangkat Bergerak Dasar</string>
+    <string name="class_description">Kelas praktikum pengembangan aplikasi Android menggunakan Kotlin, mencakup UI, komponen navigasi, hingga pengelolaan data.</string>
+    <string name="quiz_empty_title">Belum Ada Quiz</string>
+    <string name="quiz_empty_desc">Quiz untuk kelas ini belum dilaksanakan. Silakan cek kembali nanti.</string>
 </resources>
