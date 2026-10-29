@@ -5,8 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pppbd_trpl25.databinding.ItemDisasterBinding
 
-class DisasterAdapter(private val listDisaster: List<Disaster>) :
-    RecyclerView.Adapter<DisasterAdapter.ItemDisasterViewHolder>() {
+typealias OnClickDisaster = (Disaster) -> Unit
+
+class DisasterAdapter(
+    private val listDisaster: List<Disaster>,
+    private val onClickDisaster: OnClickDisaster
+) : RecyclerView.Adapter<DisasterAdapter.ItemDisasterViewHolder>() {
 
     inner class ItemDisasterViewHolder(private val binding: ItemDisasterBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -15,6 +19,9 @@ class DisasterAdapter(private val listDisaster: List<Disaster>) :
             with(binding) {
                 txtDisasterName.text = data.nameDisaster
                 txtDisasterType.text = data.disasterType
+                itemView.setOnClickListener {
+                    onClickDisaster(data)
+                }
             }
         }
     }

@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.pppbd_trpl25.databinding.ActivityMainBinding
 import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,7 +25,9 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val adapterDisaster = DisasterAdapter(generateDummy())
+        val adapterDisaster = DisasterAdapter(generateDummy()) { disaster ->
+            Toast.makeText(this@MainActivity, "You clicked on ${disaster.nameDisaster}", Toast.LENGTH_SHORT).show()
+        }
         with(binding) {
             rvDisaster.apply {
                 adapter = adapterDisaster
