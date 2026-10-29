@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.pppbd_trpl25.databinding.ActivityMainBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,9 +30,15 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this@MainActivity, "You clicked on ${disaster.nameDisaster}", Toast.LENGTH_SHORT).show()
         }
         with(binding) {
+//            linearlayoutmanager
+//            rvDisaster.apply {
+//                adapter = adapterDisaster
+//                layoutManager = LinearLayoutManager(this@MainActivity)
+//            }
+//            gridlayoutmanager
             rvDisaster.apply {
                 adapter = adapterDisaster
-                layoutManager = LinearLayoutManager(this@MainActivity)
+                layoutManager = GridLayoutManager(this@MainActivity, 2)
             }
         }
     }

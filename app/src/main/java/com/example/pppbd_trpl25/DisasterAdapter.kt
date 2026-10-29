@@ -19,6 +19,9 @@ class DisasterAdapter(
             with(binding) {
                 txtDisasterName.text = data.nameDisaster
                 txtDisasterType.text = data.disasterType
+                imgDisaster.setImageResource(
+                    if (data.disasterType == "Natural") R.drawable.ic_natural else R.drawable.ic_manmade
+                )
                 itemView.setOnClickListener {
                     onClickDisaster(data)
                 }
