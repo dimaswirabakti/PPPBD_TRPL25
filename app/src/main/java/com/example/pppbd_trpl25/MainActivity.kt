@@ -24,12 +24,25 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val adapterDisaster = DisasterAdapter()
+        val adapterDisaster = DisasterAdapter(generateDummy())
         with(binding) {
             rvDisaster.apply {
                 adapter = adapterDisaster
                 layoutManager = LinearLayoutManager(this@MainActivity)
             }
         }
+    }
+
+    fun generateDummy(): List<Disaster> {
+        return listOf(
+            Disaster(nameDisaster = "Tsunami", disasterType = "Natural"),
+            Disaster(nameDisaster = "Volcanic Eruption", disasterType = "Natural"),
+            Disaster(nameDisaster = "Earthquake", disasterType = "Natural"),
+            Disaster(nameDisaster = "Flood", disasterType = "Natural"),
+            Disaster(nameDisaster = "Fire", disasterType = "Natural"),
+            Disaster(nameDisaster = "Nuclear Accident", disasterType = "Man-made"),
+            Disaster(nameDisaster = "Terrorist Attack", disasterType = "Man-made"),
+            Disaster(nameDisaster = "War", disasterType = "Man-made")
+        )
     }
 }
