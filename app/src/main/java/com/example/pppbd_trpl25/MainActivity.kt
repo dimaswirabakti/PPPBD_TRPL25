@@ -1,5 +1,6 @@
 package com.example.pppbd_trpl25
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.pppbd_trpl25.databinding.ActivityMainBinding
+import com.example.pppbd_trpl25.model.Data
 import com.example.pppbd_trpl25.model.Users
 import com.example.pppbd_trpl25.network.ApiClient
 import retrofit2.Call
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         val client = ApiClient.getInstance()
         val response = client.getAllUsers()
+        val employees = ArrayList<Data>()
         val userList = ArrayList<String>()
 
         response.enqueue(object : Callback<Users> {
@@ -47,6 +50,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 for (i in body.data) {
+                    employees.add(i)
                     userList.add(i.employeeName)
                 }
 
@@ -56,6 +60,12 @@ class MainActivity : AppCompatActivity() {
                     userList
                 )
                 binding.lvNama.adapter = listAdapter
+
+                binding.lvNama.setOnItemClickListener { _, _, position, _ ->
+                    val intent = Intent(this@MainActivity, UserDetailActivity::class.java)
+                    intent.putExtra(UserDetailActivity.EXTRA_ID, employees[position].id)
+                    startActivity(intent)
+                }
             }
 
             override fun onFailure(call: Call<Users>, t: Throwable) {
