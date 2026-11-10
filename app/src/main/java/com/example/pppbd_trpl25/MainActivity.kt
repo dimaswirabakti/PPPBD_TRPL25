@@ -19,6 +19,9 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var listAdapter: ArrayAdapter<String>
+    private val employees = ArrayList<Data>()
+    private val userList = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +35,27 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val client = ApiClient.getInstance()
-        val response = client.getAllUsers()
-        val employees = ArrayList<Data>()
-        val userList = ArrayList<String>()
+        listAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, userList)
+        binding.lvNama.adapter = listAdapter
 
-        response.enqueue(object : Callback<Users> {
+        binding.lvNama.setOnItemClickListener { _, _, position, _ ->
+            val intent = Intent(this, UserDetailActivity::class.java)
+            intent.putExtra(UserDetailActivity.EXTRA_ID, employees[position].id)
+            startActivity(intent)
+        }
+
+        binding.btnTambah.setOnClickListener {
+            startActivity(Intent(this, UserFormActivity::class.java))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadUsers()
+    }
+
+    private fun loadUsers() {
+        ApiClient.getInstance().getAllUsers().enqueue(object : Callback<Users> {
             override fun onResponse(call: Call<Users>, response: Response<Users>) {
                 val body = response.body()
                 if (!response.isSuccessful || body == null) {
@@ -49,23 +67,13 @@ class MainActivity : AppCompatActivity() {
                     return
                 }
 
+                employees.clear()
+                userList.clear()
                 for (i in body.data) {
                     employees.add(i)
                     userList.add(i.employeeName)
                 }
-
-                val listAdapter = ArrayAdapter(
-                    this@MainActivity,
-                    android.R.layout.simple_list_item_1,
-                    userList
-                )
-                binding.lvNama.adapter = listAdapter
-
-                binding.lvNama.setOnItemClickListener { _, _, position, _ ->
-                    val intent = Intent(this@MainActivity, UserDetailActivity::class.java)
-                    intent.putExtra(UserDetailActivity.EXTRA_ID, employees[position].id)
-                    startActivity(intent)
-                }
+                listAdapter.notifyDataSetChanged()
             }
 
             override fun onFailure(call: Call<Users>, t: Throwable) {
