@@ -17,7 +17,7 @@ object ApiClient {
             .build()
 
         val builder = Retrofit.Builder()
-            .baseUrl("https://dummy.restapiexample.com/api/v1/")
+            .baseUrl("http://10.0.2.2:3000/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(mOkHttpClient)
             .build()
