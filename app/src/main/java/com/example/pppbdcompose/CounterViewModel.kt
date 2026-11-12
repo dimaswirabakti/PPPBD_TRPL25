@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 
@@ -26,6 +27,22 @@ class CounterViewModel(
     fun increment() = updateCounter(_counter.intValue + 1)
     fun decrement() = updateCounter(_counter.intValue - 1)
     fun reset() = updateCounter(0)
+
+    // State form input nama (isi sementara yang sedang diketik)
+    private val _nameInput = mutableStateOf("")
+    val nameInput: State<String> = _nameInput
+
+    // State nama yang sudah disimpan (ditampilkan di bawah counter)
+    private val _savedName = mutableStateOf("")
+    val savedName: State<String> = _savedName
+
+    fun onNameChange(newValue: String) {
+        _nameInput.value = newValue
+    }
+
+    fun saveName() {
+        _savedName.value = _nameInput.value.trim()
+    }
 
     // 4. Ubah state lalu simpan ke SharedPreferences
     private fun updateCounter(newValue: Int) {

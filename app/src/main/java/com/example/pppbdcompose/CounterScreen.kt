@@ -23,12 +23,18 @@ fun CounterApp(
     viewModel: CounterViewModel = viewModel()
 ) {
     val counter by viewModel.counter
+    val nameInput by viewModel.nameInput
+    val savedName by viewModel.savedName
 
     CounterScreen(
         counter = counter,
+        nameInput = nameInput,
+        savedName = savedName,
         onIncrement = { viewModel.increment() },
         onDecrement = { viewModel.decrement() },
         onReset = { viewModel.reset() },
+        onNameChange = { viewModel.onNameChange(it) },
+        onSave = { viewModel.saveName() },
         modifier = modifier
     )
 }
@@ -36,14 +42,19 @@ fun CounterApp(
 @Composable
 fun CounterScreen(
     counter: Int,
+    nameInput: String,
+    savedName: String,
     onIncrement: () -> Unit,
     onDecrement: () -> Unit,
     onReset: () -> Unit,
+    onNameChange: (String) -> Unit,
+    onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .imePadding()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -55,6 +66,7 @@ fun CounterScreen(
         Spacer(modifier = Modifier.height(16.dp))
         CounterDisplay(
             value = counter,
+            savedName = savedName,
             modifier = Modifier.fillMaxWidth().weight(1f)
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -63,11 +75,32 @@ fun CounterScreen(
             onIncrement = onIncrement,
             onReset = onReset
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = nameInput,
+            onValueChange = onNameChange,
+            label = { Text("Nama") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            onClick = onSave,
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF2196F3))
+        ) {
+            Text("SIMPAN")
+        }
     }
 }
 
 @Composable
-fun CounterDisplay(value: Int, modifier: Modifier = Modifier) {
+fun CounterDisplay(
+    value: Int,
+    savedName: String,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier.background(
             color = Color(0xFFF5F5F5),
@@ -83,11 +116,20 @@ fun CounterDisplay(value: Int, modifier: Modifier = Modifier) {
                 .align(Alignment.TopCenter)
                 .padding(top = 16.dp)
         )
-        Text(
-            text = value.toString(),
-            fontSize = 120.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = value.toString(),
+                fontSize = 120.sp,
+                fontWeight = FontWeight.Bold
+            )
+            if (savedName.isNotEmpty()) {
+                Text(
+                    text = savedName,
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+            }
+        }
     }
 }
 
@@ -155,9 +197,13 @@ fun CounterScreenPreview() {
     PPPBDComposeTheme {
         CounterScreen(
             counter = 7,
+            nameInput = "Nama Contoh",
+            savedName = "Nama Contoh",
             onIncrement = {},
             onDecrement = {},
-            onReset = {}
+            onReset = {},
+            onNameChange = {},
+            onSave = {}
         )
     }
 }
