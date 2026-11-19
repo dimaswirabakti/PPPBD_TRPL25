@@ -27,43 +27,60 @@ fun NotesScreen(
     vm: NotesViewModel = viewModel()
 ) {
     val notes by vm.notes.collectAsState()
-    var input by rememberSaveable { mutableStateOf("") }
+
+    // State form tambah
+    var titleInput by rememberSaveable { mutableStateOf("") }
+    var noteInput by rememberSaveable { mutableStateOf("") }
+
+    // State mode edit (satu catatan pada satu waktu)
     var editingId by rememberSaveable { mutableStateOf<Long?>(null) }
-    var editingText by rememberSaveable { mutableStateOf("") }
+    var editingTitle by rememberSaveable { mutableStateOf("") }
+    var editingNote by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = modifier
             .fillMaxSize()
+            .imePadding()
             .padding(16.dp)
     ) {
         Text(text = "Catatan Saya", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(12.dp))
 
-        // Form input (CREATE)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        // Form tambah (CREATE)
+        OutlinedTextField(
+            value = titleInput,
+            onValueChange = { titleInput = it },
+            label = { Text("Judul") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(8.dp))
+        OutlinedTextField(
+            value = noteInput,
+            onValueChange = { noteInput = it },
+            label = { Text("Isi catatan") },
+            minLines = 2,
+            maxLines = 4,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(8.dp))
+        Button(
+            onClick = {
+                if (titleInput.isNotBlank()) {
+                    vm.addNote(titleInput, noteInput)
+                    titleInput = ""
+                    noteInput = ""
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
         ) {
-            OutlinedTextField(
-                value = input,
-                onValueChange = { input = it },
-                label = { Text("Catatan baru") },
-                singleLine = true,
-                modifier = Modifier.weight(1f)
+            Icon(
+                painter = painterResource(R.drawable.ic_add),
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
             )
-            Button(onClick = {
-                vm.addNote(input)
-                input = ""
-            }) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_add),
-                    contentDescription = null,
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(Modifier.width(ButtonDefaults.IconSpacing))
-                Text("Tambah")
-            }
+            Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+            Text("Tambah")
         }
         Text(
             text = "Jumlah catatan: ${notes.size}",
@@ -82,25 +99,30 @@ fun NotesScreen(
             }
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(notes, key = { it.id }) { note ->
-                    if (editingId == note.id) {
+                items(notes, key = { it.id }) { entry ->
+                    if (editingId == entry.id) {
                         NoteItemEditing(
-                            text = editingText,
-                            onTextChange = { editingText = it },
+                            title = editingTitle,
+                            note = editingNote,
+                            onTitleChange = { editingTitle = it },
+                            onNoteChange = { editingNote = it },
                             onSave = {
-                                vm.updateNote(note, editingText)
-                                editingId = null
+                                if (editingTitle.isNotBlank()) {
+                                    vm.updateNote(entry, editingTitle, editingNote)
+                                    editingId = null
+                                }
                             },
                             onCancel = { editingId = null }
                         )
                     } else {
                         NoteItem(
-                            note = note,
+                            note = entry,
                             onEdit = {
-                                editingId = note.id
-                                editingText = note.title
+                                editingId = entry.id
+                                editingTitle = entry.title
+                                editingNote = entry.note
                             },
-                            onDelete = { vm.deleteNote(note) }
+                            onDelete = { vm.deleteNote(entry) }
                         )
                     }
                     HorizontalDivider()
@@ -117,8 +139,11 @@ fun NoteItem(
     onDelete: () -> Unit = {}
 ) {
     ListItem(
-        headlineContent = { Text(note.title) },
-        supportingContent = { Text("ID: ${note.id}") },
+        overlineContent = { Text("ID: ${note.id}") },
+        headlineContent = { Text(note.title, fontWeight = FontWeight.Bold) },
+        supportingContent = if (note.note.isNotBlank()) {
+            { Text(note.note) }
+        } else null,
         trailingContent = {
             Row {
                 IconButton(onClick = onEdit) {
@@ -136,30 +161,45 @@ fun NoteItem(
 
 @Composable
 fun NoteItemEditing(
-    text: String,
-    onTextChange: (String) -> Unit,
+    title: String,
+    note: String,
+    onTitleChange: (String) -> Unit,
+    onNoteChange: (String) -> Unit,
     onSave: () -> Unit,
     onCancel: () -> Unit
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(vertical = 8.dp)
     ) {
         OutlinedTextField(
-            value = text,
-            onValueChange = onTextChange,
-            label = { Text("Ubah catatan") },
+            value = title,
+            onValueChange = onTitleChange,
+            label = { Text("Ubah judul") },
             singleLine = true,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.fillMaxWidth()
         )
-        IconButton(onClick = onSave) {
-            Icon(painterResource(R.drawable.ic_check), "Simpan",
-                 tint = Color(0xFF4CAF50))
-        }
-        IconButton(onClick = onCancel) {
-            Icon(painterResource(R.drawable.ic_close), "Batal")
+        Spacer(Modifier.height(8.dp))
+        OutlinedTextField(
+            value = note,
+            onValueChange = onNoteChange,
+            label = { Text("Ubah isi catatan") },
+            minLines = 2,
+            maxLines = 4,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            IconButton(onClick = onSave) {
+                Icon(painterResource(R.drawable.ic_check), "Simpan",
+                     tint = Color(0xFF4CAF50))
+            }
+            IconButton(onClick = onCancel) {
+                Icon(painterResource(R.drawable.ic_close), "Batal")
+            }
         }
     }
 }
@@ -168,6 +208,12 @@ fun NoteItemEditing(
 @Composable
 fun NoteItemPreview() {
     PPPBDComposeTheme {
-        NoteItem(note = Note(id = 1, title = "Belajar Room Database"))
+        NoteItem(
+            note = Note(
+                id = 1,
+                title = "Belajar Room Database",
+                note = "Entity, DAO, dan Database adalah tiga komponen utama Room."
+            )
+        )
     }
 }
